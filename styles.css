@@ -1,0 +1,181 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+}
+
+.container {
+  width: 80%;
+  margin: 20px auto;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background-color: #888;
+  color: white;
+}
+
+.user-section {
+  display: flex;
+  align-items: center;
+}
+
+.user-section span {
+  margin-right: 10px;
+}
+
+.settings-btn, .profile-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 18px;
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+.search-bar {
+  padding: 10px 20px;
+  background: #eee;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.device-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.device-table th, .device-table td {
+  padding: 15px;
+  border-bottom: 1px solid #ddd;
+}
+
+.device-table th {
+  background: #f4f4f4;
+}
+
+.status {
+  font-weight: bold;
+}
+
+.online {
+  color: green;
+}
+
+.offline {
+  color: red;
+}
+
+.operations .icon-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  margin: 0 5px;
+}
+
+.delete-btn {
+  color: red;
+}
+
+.warning-btn {
+  color: orange;
+}
+
+.add-device-btn {
+  width: calc(100% - 40px);
+  margin: 20px;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: #444;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.add-device-btn:hover {
+  background-color: #333;
+}
+/* Add this to your existing CSS file */
+
+/* Hidden form */
+.new-device-form {
+  display: none;
+  margin: 20px auto;
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.new-device-form table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 10px;
+}
+
+.new-device-form th, .new-device-form td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.new-device-form input {
+  width: 90%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.new-device-form button {
+  padding: 10px 15px;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+}
+
+.form-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.cancel-btn {
+  background-color: #555;
+  color: white;
+}
+
+.save-btn {
+  background-color: #444;
+  color: white;
+}
+
+.cancel-btn:hover, .save-btn:hover {
+  background-color: #333;
+}
+
+.required-fields {
+  color: red;
+  font-size: 12px;
+}
+
+.status.pending {
+  color: gray;
+  font-style: italic;
+}

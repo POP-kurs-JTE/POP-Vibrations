@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Device Management</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>Device Management</h1>
+      <div class="user-section">
+        <span>User 4</span>
+        <button class="settings-btn">⚙️</button>
+        <button class="profile-btn">👤</button>
+      </div>
+    </header>
+    <div class="search-bar">
+      <input type="text" placeholder="Search">
+    </div>
+    <table class="device-table">
+      <thead>
+        <tr>
+          <th>Device</th>
+          <th>Status</th>
+          <th>Last upload to server</th>
+          <th>Operation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>samsung galaxy s24</td>
+          <td class="status online">ONLINE</td>
+          <td>2024-12-23 12:15 (Gmt+3)</td>
+          <td class="operations">
+            <button class="icon-btn">📹</button>
+            <button class="icon-btn">📊</button>
+            <button class="icon-btn ok-btn">✔️</button>
+            <button class="icon-btn delete-btn">🗑️</button>
+          </td>
+        </tr>
+        <tr>
+          <td>huawei mate xt</td>
+          <td class="status online">ONLINE</td>
+          <td>2024-12-23 12:15 (Gmt+3)</td>
+          <td class="operations">
+            <button class="icon-btn">📹</button>
+            <button class="icon-btn">📊</button>
+            <button class="icon-btn ok-btn">✔️</button>
+            <button class="icon-btn delete-btn">🗑️</button>
+          </td>
+        </tr>
+        <tr>
+          <td>samsung galaxy s21</td>
+          <td class="status offline">OFFLINE</td>
+          <td>2024-12-22 00:05 (Gmt+3)</td>
+          <td class="operations">
+            <button class="icon-btn">📹</button>
+            <button class="icon-btn">📊</button>
+            <button class="icon-btn warning-btn">⚠️</button>
+            <button class="icon-btn delete-btn">🗑️</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <button class="add-device-btn" id="addDeviceButton">ADD NEW DEVICE</button>
+
+    <!-- Hidden form for adding a new device -->
+    <div class="new-device-form" id="newDeviceForm">
+      <table>
+        <thead>
+          <tr>
+            <th>New Device Name</th>
+            <th>New Device Phone Number</th>
+            <th>Camera Connection</th>
+            <th>User Phone number</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input type="text" placeholder="[ENTER NAME]*" required></td>
+            <td><input type="text" placeholder="[NEW DEVICE PHONE NUMBER]*" required></td>
+            <td><button>CONNECT CAMERA</button></td>
+            <td><input type="text" placeholder="[USER PHONE NUMBER]*" required></td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="required-fields">*REQUIRED FIELDS</p>
+      <div class="form-buttons">
+        <button class="cancel-btn" id="cancelButton">CANCEL & DISCARD</button>
+        <button class="save-btn">SAVE</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
