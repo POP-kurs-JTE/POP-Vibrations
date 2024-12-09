@@ -81,7 +81,7 @@ searchBar.addEventListener('input', () => {
 
   rows.forEach(row => {
     const deviceNameCell = row.querySelector('td:first-child'); // Get the first cell (device name)
-    
+
     // Only check rows that are not placeholders for "No Results"
     if (deviceNameCell) {
       const deviceName = deviceNameCell.textContent.toLowerCase();
@@ -95,6 +95,7 @@ searchBar.addEventListener('input', () => {
   });
 
   // Handle "No Results" message
+  // Test comment
   let noResultsRow = document.querySelector('.no-results');
   if (!hasResults) {
     if (!noResultsRow) {
