@@ -1,5 +1,5 @@
 // script.js
-
+//Kokko Lolo
 // Toggle the visibility of the "Add New Device" form
 const addDeviceButton = document.getElementById("addDeviceButton");
 const newDeviceForm = document.getElementById("newDeviceForm");
