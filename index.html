@@ -1,104 +1,370 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Device Management</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
+<div id="choose-user-section" class="choose-user">
 
-<body>
-  <div class="container">
-    <header class="header">
-      <h1>Device Management</h1>
-      <div class="user-section">
-        <span>User 4</span>
-        <button class="settings-btn">⚙️</button>
-        <button class="profile-btn">👤</button>
-      </div>
-    </header>
-    <div class="search-bar">
-      <input type="text" placeholder="Search">
+
+  <h2>Choose User</h2>
+  <p>Or create a new user</p>
+  <label for="user-select">PROFILE</label>
+  <select id="user-select">
+    <option value="" disabled selected>Choose a User</option>
+    <option value="add-new-user">Add New User</option>
+  </select>
+  <button id="continue-btn" disabled>Continue</button>
+</div>
+
+<!-- Add New User Modal -->
+<div id="add-user-modal" class="modal" style="display: none;">
+  <div class="modal-content">
+    <h3>Add New User</h3>
+    <input type="text" id="new-user-input" placeholder="Enter New User Name" />
+    <div class="modal-buttons">
+      <button id="cancel-btn" class="cancel-btn">Cancel</button>
+      <button id="save_User-btn" class="save_User-btn">Save User</button>
     </div>
-    <table class="device-table">
-      <thead>
-        <tr>
-          <th>Device</th>
-          <th>Status</th>
-          <th>Last upload to server</th>
-          <th>Operation</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>samsung galaxy s24</td>
-          <td class="status online">ONLINE</td>
-          <td>2024-12-23 12:15 (Gmt+3)</td>
-          <td class="operations">
-            <button class="icon-btn">📹</button>
-            <button class="icon-btn">📊</button>
-            <button class="icon-btn ok-btn">✔️</button>
-            <button class="icon-btn delete-btn">🗑️</button>
-          </td>
-        </tr>
-        <tr>
-          <td>huawei mate xt</td>
-          <td class="status online">ONLINE</td>
-          <td>2024-12-23 12:15 (Gmt+3)</td>
-          <td class="operations">
-            <button class="icon-btn">📹</button>
-            <button class="icon-btn">📊</button>
-            <button class="icon-btn ok-btn">✔️</button>
-            <button class="icon-btn delete-btn">🗑️</button>
-          </td>
-        </tr>
-        <tr>
-          <td>samsung galaxy s21</td>
-          <td class="status offline">OFFLINE</td>
-          <td>2024-12-22 00:05 (Gmt+3)</td>
-          <td class="operations">
-            <button class="icon-btn">📹</button>
-            <button class="icon-btn">📊</button>
-            <button class="icon-btn warning-btn">⚠️</button>
-            <button class="icon-btn delete-btn">🗑️</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <button class="add-device-btn" id="addDeviceButton">ADD NEW DEVICE</button>
+  </div>
+</div>
+
+<div id="device-management-section" class="device-management" style="display: none;">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device Management</title>
+    <link rel="stylesheet" href="styles.css">
+    <title>Device Management</title>
+
+    <!-- Include the Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Include the jsPDF library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <!-- Add your custom styles (styles.css) -->
+    <link rel="stylesheet" href="styles.css">
+  </head>
+
+  <body>
+    <div class="container">
+      <header class="header">
+        <h1>Device Management</h1>
+        <div class="user-section">
+          <span id="current-user" class="user-profile"></span>
+          <div class="settings-icons">
+            <!-- Settings button in the Device Management section -->
+            <button class="icon-btn" title="Settings" id="settingsBtn" onclick="toggleDropdown()">⚙️</button>
+
+            <!-- Dropdown menu structure (Initially hidden) -->
+            <div id="settingsDropdown" class="settings-dropdown">
+              <ul>
+                <li><button id="changePhoneNumberBtn" onclick="changePhoneNumber()">Change Phone Number</button></li>
+                <li><button id="changeUsernameBtn" onclick="changeUsername()">Change Username</button></li>
+                <li><button id="deleteUserBtn" onclick="deleteUser()">Delete User</button></li>
+              </ul>
+            </div>
+
+            <!-- Profile button and dropdown -->
+            <div class="profile-dropdown">
+              <button class="icon-btn" title="Profile" id="profileBtn" onclick="toggleProfileDropdown()">👤</button>
+              <!-- Dropdown menu (Initially hidden) -->
+              <div id="profileDropdownMenu" class="profile-dropdown-menu" style="display: none;">
+                <ul>
+                  <li><button id="switchUserBtn" onclick="switchUser()">Switch User</button></li>
+                </ul>
 
 
-    <!-- Hidden form for adding a new device -->
-    <!-- Hidden form for adding a new device -->
-    <div class="new-device-form" id="newDeviceForm">
-      <table>
+
+
+      </header>
+      <div class="search-bar">
+        <input type="text" placeholder="Search">
+      </div>
+      <table class="device-table">
         <thead>
           <tr>
-            <th>New Device Name</th>
-            <th>New Device Phone Number</th>
-            <th>Camera Connection</th>
-            <th>User Phone number</th>
+            <th>Device</th>
+            <th>Status</th>
+            <th>Last upload to server</th>
+            <th>Operation</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><input type="text" placeholder="[ENTER NAME]*" required></td>
-            <td><input type="text" placeholder="[NEW DEVICE PHONE NUMBER]*" required></td>
-            <td><button>CONNECT CAMERA</button></td>
-            <td><input type="text" placeholder="[USER PHONE NUMBER]*" required></td>
+            <td>Example Device / Placeholder
+            <td class="status online">ONLINE</td>
+            <td>2024-12-23 12:15 (Gmt+3)</td>
+            <td class="operations">
+              <button class="icon-btn">📹</button>
+              <button class="icon-btn" title="View Graph" onclick="toggleGraphWindow()">📊</button>
+              <button class="icon-btn ok-btn">✔️</button>
+              <button class="icon-btn delete-btn">🗑️</button>
+            </td>
+          </tr>
+          <tr>
+
+            </td>
           </tr>
         </tbody>
       </table>
-      <p class="required-fields">*REQUIRED FIELDS</p>
-      <div class="form-buttons">
-        <button class="cancel-btn" id="cancelButton">CANCEL & DISCARD</button>
-        <button class="save-btn">SAVE</button>
+      <button class="add-device-btn" id="addDeviceButton">ADD NEW DEVICE</button>
+
+      <!-- Hidden form for adding a new device -->
+      <!-- Hidden form for adding a new device -->
+      <div class="new-device-form" id="newDeviceForm">
+        <table>
+          <thead>
+            <tr>
+              <th>New Device Name</th>
+              <th>New Device Phone Number</th>
+              <th>Camera Connection</th>
+              <th>User Phone number</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><input type="text" placeholder="[ENTER NAME]*" required></td>
+              <td><input type="text" placeholder="[NEW DEVICE PHONE NUMBER]*" required></td>
+              <td><button>CONNECT CAMERA</button></td>
+              <td><input type="text" placeholder="[USER PHONE NUMBER]*" required></td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="required-fields">*REQUIRED FIELDS</p>
+        <div class="form-buttons">
+          <button class="cancel-btn" id="cancelButton">CANCEL & DISCARD</button>
+          <button class="save-btn">SAVE</button>
+        </div>
       </div>
+
+
+      <script src="script.js"></script>
+  </body>
+
+  <!DOCTYPE html>
+  <html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device Management</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+      /* Add styles for the graph window */
+      .graph-window {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 80%;
+        height: 80%;
+        background: white;
+        border: 2px solid #333;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        overflow: auto;
+      }
+
+      .graph-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+      }
+
+      .icon-btn {
+        cursor: pointer;
+        font-size: 24px;
+        background: none;
+        border: none;
+      }
+
+      /* Additional styles for titles and descriptions */
+      .graph-title {
+        font-size: 1.5em;
+        font-weight: bold;
+        margin-top: 20px;
+      }
+
+      .graph-description {
+        font-size: 1.1em;
+        margin-bottom: 20px;
+        color: #555;
+      }
+
+      .graph-container {
+        margin-bottom: 40px;
+      }
+    </style>
+  </head>
+
+  <body>
+
+</div>
+</div>
+</header>
+
+<!-- Graph Window (for displaying multiple graphs) -->
+<div id="graph-window" class="graph-window">
+  <h2>Sensor Data Visualization</h2>
+
+  <!-- Accelerometer Graph Section -->
+  <div class="graph-container">
+    <div class="graph-title">Accelerometer Data</div>
+    <div class="graph-description">
+      The accelerometer measures the acceleration force in three dimensions (X, Y, Z) of the device.
     </div>
+    <canvas id="accelerometerGraph"></canvas>
   </div>
 
-  <script src="script.js"></script>
-</body>
+  <!-- Gyroscope Graph Section -->
+  <div class="graph-container">
+    <div class="graph-title">Gyroscope Data</div>
+    <div class="graph-description">
+      The gyroscope measures the angular velocity (rate of rotation) around the three axes of the device.
+    </div>
+    <canvas id="gyroscopeGraph"></canvas>
+  </div>
 
-</html>
+  <!-- Rotation Vector Graph Section -->
+  <div class="graph-container">
+    <div class="graph-title">Rotation Vector</div>
+    <div class="graph-description">
+      The rotation vector provides the orientation of the device in 3D space, calculated using the device's sensors.
+    </div>
+    <canvas id="rotationVectorGraph"></canvas>
+  </div>
+
+  <!-- Linear Acceleration Graph Section -->
+  <div class="graph-container">
+    <div class="graph-title">Linear Acceleration</div>
+    <div class="graph-description">
+      The linear acceleration graph represents the device's acceleration in straight-line motion, excluding
+      gravitational effects.
+    </div>
+    <canvas id="linearAccelerationGraph"></canvas>
+  </div>
+
+  <!-- Download PDF Button -->
+  <button id="downloadPdfBtn">Download PDF Report</button>
+</div>
+
+<div id="graph-overlay" class="graph-overlay" onclick="closeGraphWindow()"></div>
+
+<script>
+  // Placeholder for the JSON data you will receive (replace this with real data)
+  const sensorData = {
+    accelerometer: [{ x: 1, y: 2, z: 3 }, { x: 4, y: 5, z: 6 }],
+    gyroscope: [{ x: 0.1, y: 0.2, z: 0.3 }, { x: 0.4, y: 0.5, z: 0.6 }],
+    rotationVector: [{ x: 0, y: 1, z: 0 }, { x: 1, y: 0, z: 0 }],
+    linearAcceleration: [{ x: 2, y: 3, z: 4 }, { x: 5, y: 6, z: 7 }]
+  };
+
+  // Function to plot graphs using Chart.js
+  function plotGraph(ctx, data, title) {
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: data.map((_, index) => index + 1),
+        datasets: [
+          {
+            label: `${title} X-axis`,
+            data: data.map(item => item.x),
+            borderColor: 'red',
+            fill: false
+          },
+          {
+            label: `${title} Y-axis`,
+            data: data.map(item => item.y),
+            borderColor: 'green',
+            fill: false
+          },
+          {
+            label: `${title} Z-axis`,
+            data: data.map(item => item.z),
+            borderColor: 'blue',
+            fill: false
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          x: { type: 'linear', position: 'bottom' }
+        }
+      }
+    });
+  }
+
+  // Plot graphs for accelerometer, gyroscope, rotation vector, and linear acceleration
+  window.onload = function () {
+    const accelerometerCanvas = document.getElementById('accelerometerGraph').getContext('2d');
+    const gyroscopeCanvas = document.getElementById('gyroscopeGraph').getContext('2d');
+    const rotationVectorCanvas = document.getElementById('rotationVectorGraph').getContext('2d');
+    const linearAccelerationCanvas = document.getElementById('linearAccelerationGraph').getContext('2d');
+
+    plotGraph(accelerometerCanvas, sensorData.accelerometer, 'Accelerometer');
+    plotGraph(gyroscopeCanvas, sensorData.gyroscope, 'Gyroscope');
+    plotGraph(rotationVectorCanvas, sensorData.rotationVector, 'Rotation Vector');
+    plotGraph(linearAccelerationCanvas, sensorData.linearAcceleration, 'Linear Acceleration');
+  };
+
+  // Function to toggle the visibility of the graph window
+  function toggleGraphWindow() {
+    const graphWindow = document.getElementById("graph-window");
+    const graphOverlay = document.getElementById("graph-overlay");
+    const currentDisplay = graphWindow.style.display;
+    if (currentDisplay === "none" || currentDisplay === "") {
+      // Show the graph window and overlay
+      graphWindow.style.display = "block";
+      graphOverlay.style.display = "block";
+    } else {
+      // Hide the graph window and overlay
+      graphWindow.style.display = "none";
+      graphOverlay.style.display = "none";
+    }
+  }
+
+  // Function to close the graph window
+  function closeGraphWindow() {
+    const graphWindow = document.getElementById("graph-window");
+    const graphOverlay = document.getElementById("graph-overlay");
+    graphWindow.style.display = "none";
+    graphOverlay.style.display = "none";
+  }
+
+  // Function to download the PDF report
+  document.getElementById('downloadPdfBtn').addEventListener('click', function () {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    // Add some text to the PDF
+    doc.text("Sensor Data Report", 20, 20);
+
+    // Add the accelerometer graph as an image to the PDF
+    const accelerometerCanvas = document.getElementById('accelerometerGraph');
+    doc.addImage(accelerometerCanvas, 'PNG', 20, 30, 180, 150);
+
+    // Similarly, you can add other graphs
+    const gyroscopeCanvas = document.getElementById('gyroscopeGraph');
+    doc.addImage(gyroscopeCanvas, 'PNG', 20, 180, 180, 150);
+
+    const rotationVectorCanvas = document.getElementById('rotationVectorGraph');
+    doc.addImage(rotationVectorCanvas, 'PNG', 20, 330, 180, 150);
+
+    const linearAccelerationCanvas = document.getElementById('linearAccelerationGraph');
+    doc.addImage(linearAccelerationCanvas, 'PNG', 20, 480, 180, 150);
+
+    // Download the PDF
+    doc.save('SensorDataReport.pdf');
+  });
+</script>
+</body>

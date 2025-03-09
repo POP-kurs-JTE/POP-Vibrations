@@ -179,3 +179,197 @@ body {
   color: gray;
   font-style: italic;
 }
+
+.choose-user {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+.choose-user h2 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.choose-user p {
+  font-size: 1rem;
+  margin-bottom: 20px;
+  color: gray;
+}
+
+.choose-user label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.choose-user select {
+  padding: 10px;
+  width: 200px;
+  font-size: 1rem;
+  margin-bottom: 20px;
+}
+
+.choose-user button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: gray;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.choose-user button:disabled {
+  background-color: lightgray;
+  cursor: not-allowed;
+}
+
+.device-management {
+  padding: 20px;
+}
+
+/* Modal Styling */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  width: 300px;
+}
+
+.modal-content h3 {
+  margin-bottom: 15px;
+}
+
+.modal-content input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  font-size: 1rem;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.cancel-btn,
+.save-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  background-color: gray;
+  color: white;
+}
+
+.save-btn {
+  background-color: green;
+  color: white;
+}
+
+.user-profile {
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-right: 10px;
+}
+
+/* Style for settings dropdown */
+.settings-dropdown {
+  display: none;
+  position: absolute;
+  top: 50px; /* Adjust the position */
+  right: 10px;
+  background-color: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 999;
+  padding: 10px;
+  border-radius: 5px;
+  width: 200px;
+}
+
+.settings-dropdown ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.settings-dropdown li {
+  padding: 8px;
+}
+
+.settings-dropdown button {
+  width: 100%;
+  padding: 8px;
+  text-align: left;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.settings-dropdown button:hover {
+  background-color: #f0f0f0;
+}
+
+.show-dropdown {
+  display: block;
+}
+
+/* Profile dropdown styles */
+.profile-dropdown {
+  position: relative;
+}
+
+.profile-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #fff;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  min-width: 160px;
+  z-index: 100;
+}
+
+.profile-dropdown-menu ul {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+
+.profile-dropdown-menu li {
+  padding: 10px;
+}
+
+.profile-dropdown-menu li button {
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.profile-dropdown-menu li button:hover {
+  background-color: #f0f0f0;
+}
