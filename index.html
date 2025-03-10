@@ -18,7 +18,7 @@
 <div id="add-user-modal" class="modal" style="display: none;">
   <div class="modal-content">
     <h3>Add New User</h3>
-    <input type="text" id="new-user-input" placeholder="Enter New User Name" />
+    <input type="text" id="new-user-input" placeholder="Enter New User Name" style="width: 220px; height: 20px;" />
     <div class="modal-buttons">
       <button id="cancel-btn" class="cancel-btn">Cancel</button>
       <button id="save_User-btn" class="save_User-btn">Save User</button>
@@ -40,6 +40,11 @@
 
     <!-- Include the jsPDF library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <!-- Include jsPDF & html2canvas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
 
     <!-- Add your custom styles (styles.css) -->
     <link rel="stylesheet" href="styles.css">
@@ -151,6 +156,9 @@
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- Include jsPDF & html2canvas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
       /* Add styles for the graph window */
       .graph-window {
@@ -257,6 +265,20 @@
   <button id="downloadPdfBtn">Download PDF Report</button>
 </div>
 
+<!-- Content to be exported -->
+<div id="content">
+  <div class="chart"> <!-- Each section as a separate div -->
+    <canvas id="chart1"></canvas>
+  </div>
+  <div class="chart">
+    <canvas id="chart2"></canvas>
+  </div>
+  <div class="chart">
+    <canvas id="chart3"></canvas>
+  </div>
+</div>
+</div>
+
 <div id="graph-overlay" class="graph-overlay" onclick="closeGraphWindow()"></div>
 
 <script>
@@ -342,28 +364,47 @@
   }
 
   // Function to download the PDF report
-  document.getElementById('downloadPdfBtn').addEventListener('click', function () {
+  document.getElementById('downloadPdfBtn').addEventListener('click', async function () {
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
+    const doc = new jsPDF('p', 'mm', 'a4'); // A4 Portrait mode
+    let yOffset = 20; // Initial vertical position
 
-    // Add some text to the PDF
-    doc.text("Sensor Data Report", 20, 20);
+    // Add Title
+    doc.setFontSize(18);
+    doc.text("Sensor Data Report", 15, yOffset);
+    yOffset += 10; // Move down
 
-    // Add the accelerometer graph as an image to the PDF
-    const accelerometerCanvas = document.getElementById('accelerometerGraph');
-    doc.addImage(accelerometerCanvas, 'PNG', 20, 30, 180, 150);
+    // List of graph IDs
+    const graphIds = ['accelerometerGraph', 'gyroscopeGraph', 'rotationVectorGraph', 'linearAccelerationGraph'];
 
-    // Similarly, you can add other graphs
-    const gyroscopeCanvas = document.getElementById('gyroscopeGraph');
-    doc.addImage(gyroscopeCanvas, 'PNG', 20, 180, 180, 150);
+    for (let i = 0; i < graphIds.length; i++) {
+      let canvasElement = document.getElementById(graphIds[i]);
 
-    const rotationVectorCanvas = document.getElementById('rotationVectorGraph');
-    doc.addImage(rotationVectorCanvas, 'PNG', 20, 330, 180, 150);
+      if (!canvasElement) {
+        console.error(`Element with ID ${graphIds[i]} not found.`);
+        continue; // Skip missing elements
+      }
 
-    const linearAccelerationCanvas = document.getElementById('linearAccelerationGraph');
-    doc.addImage(linearAccelerationCanvas, 'PNG', 20, 480, 180, 150);
+      try {
+        const canvasImage = await html2canvas(canvasElement, { scale: 2 });
+        const imgData = canvasImage.toDataURL('image/png');
 
-    // Download the PDF
+        let imgWidth = 180; // Maintain margins
+        let imgHeight = (canvasImage.height * imgWidth) / canvasImage.width; // Keep aspect ratio
+
+        if (yOffset + imgHeight > 280) { // If image overflows, add new page
+          doc.addPage();
+          yOffset = 20; // Reset for new page
+        }
+
+        doc.addImage(imgData, 'PNG', 15, yOffset, imgWidth, imgHeight);
+        yOffset += imgHeight + 10; // Move down for next image
+      } catch (error) {
+        console.error(`Error rendering graph ${graphIds[i]}:`, error);
+      }
+    }
+
+    // Save the PDF
     doc.save('SensorDataReport.pdf');
   });
 </script>
