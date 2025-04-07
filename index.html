@@ -244,29 +244,34 @@
         1077px;" </canvas>
     </div>
 
-    <!-- Rotation Vector Graph Section -->
+    <!-- Orientation Sensor -->
     <div class="graph-container">
-      <div class="graph-title">Rotation Vector</div>
+      <div class="graph-title">Orientation Sensor</div>
       <div class="graph-description">
-        The rotation vector provides the orientation of the device in 3D space, calculated using the device's sensors.
+        Shows the orientation of the device in 3D space.
       </div>
-      <canvas id="rotationVectorGraph"></canvas>
+      <canvas id="orientationSensorGraph" height="500" style="display: block; height: 500px; width: 100%;"></canvas>
     </div>
 
-    <!-- Linear Acceleration Graph Section -->
+    <!-- Pressure Sensor -->
     <div class="graph-container">
-      <div class="graph-title">Linear Acceleration</div>
+      <div class="graph-title">ICP20100 Pressure Sensor</div>
       <div class="graph-description">
-        The linear acceleration graph represents the device's acceleration in straight-line motion, excluding
-        gravitational effects.
+        Measures ambient air pressure.
       </div>
-      <canvas id="linearAccelerationGraph"></canvas>
-
+      <canvas id="pressureSensorGraph" height="500" style="display: block; height: 500px; width: 100%;"></canvas>
     </div>
+
+    <!-- Magnetometer -->
+    <div class="graph-container">
+      <div class="graph-title">MMC56X3X Magnetometer</div>
+      <div class="graph-description">
+        Measures magnetic field strength on X, Y, Z axes.
+      </div>
+      <canvas id="magnetometerGraph" height="500" style="display: block; height: 500px; width: 100%;"></canvas>
+    </div>
+
     <button id="downloadPdfBtn">Download PDF Report</button>
-
-
-    <!-- Download PDF Button -->
     <select id="logDropdown" onchange="loadLogData(this.value)">
       <option value="">Select a log entry</option>
     </select>
@@ -327,12 +332,11 @@
         const sensorData = {
           accelerometer: [],
           gyroscope: [],
-          rotationVector: [],
-          linearAcceleration: [],
+          orientationSensor: [],
+          pressureSensor: [],
           magnetometer: []
         };
 
-        // Loopar igenom varje rad och lägger in datan i rätt kategori
         dataLines.forEach(entry => {
           const { sensorType, values, timestamp } = entry;
           const formattedData = { timestamp, x: values[0], y: values[1], z: values[2] };
@@ -341,11 +345,12 @@
             sensorData.accelerometer.push(formattedData);
           } else if (sensorType.includes("Gyroscope")) {
             sensorData.gyroscope.push(formattedData);
-          } else if (sensorType.includes("Rotation Vector")) {
-            sensorData.rotationVector.push(formattedData);
-          } else if (sensorType.includes("Linear Acceleration")) {
-            sensorData.linearAcceleration.push(formattedData);
-          } else if (sensorType.includes("Magnetometer")) {
+          } else if (sensorType.includes("Orientation Sensor")) {
+            sensorData.orientationSensor.push(formattedData);
+          } else if (sensorType.includes("ICP20100 Pressure Sensor")) {
+            // Pressure only has 1 value, use x
+            sensorData.pressureSensor.push({ timestamp, x: values[0] });
+          } else if (sensorType.includes("MMC56X3X Magnetometer")) {
             sensorData.magnetometer.push(formattedData);
           }
         });
@@ -353,38 +358,44 @@
         console.log("Laddad sensordata:", sensorData); // Debug-logg
 
         // Rita upp graferna
-        drawGraph('accelerometerGraph', 'Accelerometer Data', sensorData.accelerometer);
-        drawGraph('gyroscopeGraph', 'Gyroscope Data', sensorData.gyroscope);
-        drawGraph('rotationVectorGraph', 'Rotation Vector Data', sensorData.rotationVector);
-        drawGraph('linearAccelerationGraph', 'Linear Acceleration Data', sensorData.linearAcceleration);
-        drawGraph('magnetometerGraph', 'Magnetometer Data', sensorData.magnetometer);
+        drawGraph('accelerometerGraph', 'Accelerometer', sensorData.accelerometer);
+        drawGraph('gyroscopeGraph', 'Gyroscope', sensorData.gyroscope);
+        drawGraph('orientationSensorGraph', 'Orientation Sensor', sensorData.orientationSensor);
+        drawGraph('pressureSensorGraph', 'Pressure Sensor', sensorData.pressureSensor, true); // Endast X
+        drawGraph('magnetometerGraph', 'Magnetometer', sensorData.magnetometer);
 
       } catch (error) {
         console.error("Fel vid hämtning av data:", error);
       }
     }
 
-    function drawGraph(canvasId, label, data) {
+    function drawGraph(canvasId, label, data, onlyX = false) {
       const ctx = document.getElementById(canvasId).getContext('2d');
-
-      // Rensa canvas innan du ritar den nya grafen
       ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
-      // Skapa datasets för X, Y och Z
       const timestamps = data.map(d => new Date(d.timestamp).toLocaleTimeString());
-      const xData = data.map(d => d.x);
-      const yData = data.map(d => d.y);
-      const zData = data.map(d => d.z);
+      const datasets = [];
+
+      if (onlyX) {
+        datasets.push({
+          label: `${label}`,
+          data: data.map(d => d.x),
+          borderColor: 'purple',
+          fill: false
+        });
+      } else {
+        datasets.push(
+          { label: `${label} - X`, data: data.map(d => d.x), borderColor: 'red', fill: false },
+          { label: `${label} - Y`, data: data.map(d => d.y), borderColor: 'green', fill: false },
+          { label: `${label} - Z`, data: data.map(d => d.z), borderColor: 'blue', fill: false }
+        );
+      }
 
       new Chart(ctx, {
         type: 'line',
         data: {
           labels: timestamps,
-          datasets: [
-            { label: `${label} - X`, data: xData, borderColor: 'red', fill: false },
-            { label: `${label} - Y`, data: yData, borderColor: 'green', fill: false },
-            { label: `${label} - Z`, data: zData, borderColor: 'blue', fill: false }
-          ]
+          datasets
         },
         options: {
           responsive: true,
@@ -396,7 +407,6 @@
         }
       });
     }
-
 
 
 
@@ -439,7 +449,13 @@
       yOffset += 10; // Move down
 
       // List of graph IDs
-      const graphIds = ['accelerometerGraph', 'gyroscopeGraph', 'rotationVectorGraph', 'linearAccelerationGraph'];
+      const graphIds = [
+        'accelerometerGraph',
+        'gyroscopeGraph',
+        'orientationSensorGraph',
+        'pressureSensorGraph',
+        'magnetometerGraph'
+      ];
 
       for (let i = 0; i < graphIds.length; i++) {
         let canvasElement = document.getElementById(graphIds[i]);

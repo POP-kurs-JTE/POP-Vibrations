@@ -401,3 +401,36 @@ body {
   overflow: hidden;
   /* Förhindrar att extra innehåll visas utanför */
 }
+
+#orientationSensorGraph {
+  height: 500px !important;
+  /* Låser höjden till en fast 500px */
+  max-height: 500px !important;
+  /* Sätter en övre gräns för höjden */
+  width: 100% !important;
+  /* Sätter bredden till 100% av container */
+  overflow: hidden;
+  /* Förhindrar att extra innehåll visas utanför */
+}
+
+#pressureSensorGraph {
+  height: 500px !important;
+  /* Låser höjden till en fast 500px */
+  max-height: 500px !important;
+  /* Sätter en övre gräns för höjden */
+  width: 100% !important;
+  /* Sätter bredden till 100% av container */
+  overflow: hidden;
+  /* Förhindrar att extra innehåll visas utanför */
+}
+
+#magnetometerGraph {
+  height: 500px !important;
+  /* Låser höjden till en fast 500px */
+  max-height: 500px !important;
+  /* Sätter en övre gräns för höjden */
+  width: 100% !important;
+  /* Sätter bredden till 100% av container */
+  overflow: hidden;
+  /* Förhindrar att extra innehåll visas utanför */
+}
