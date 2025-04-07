@@ -32,7 +32,8 @@ body {
   margin-right: 10px;
 }
 
-.settings-btn, .profile-btn {
+.settings-btn,
+.profile-btn {
   background: none;
   border: none;
   color: white;
@@ -59,7 +60,8 @@ body {
   text-align: left;
 }
 
-.device-table th, .device-table td {
+.device-table th,
+.device-table td {
   padding: 15px;
   border-bottom: 1px solid #ddd;
 }
@@ -112,6 +114,7 @@ body {
 .add-device-btn:hover {
   background-color: #333;
 }
+
 /* Add this to your existing CSS file */
 
 /* Hidden form */
@@ -130,7 +133,8 @@ body {
   margin-bottom: 10px;
 }
 
-.new-device-form th, .new-device-form td {
+.new-device-form th,
+.new-device-form td {
   padding: 10px;
   text-align: left;
   border-bottom: 1px solid #ddd;
@@ -166,7 +170,8 @@ body {
   color: white;
 }
 
-.cancel-btn:hover, .save-btn:hover {
+.cancel-btn:hover,
+.save-btn:hover {
   background-color: #333;
 }
 
@@ -297,7 +302,8 @@ body {
 .settings-dropdown {
   display: none;
   position: absolute;
-  top: 50px; /* Adjust the position */
+  top: 50px;
+  /* Adjust the position */
   right: 10px;
   background-color: white;
   border: 1px solid #ccc;
@@ -372,4 +378,26 @@ body {
 
 .profile-dropdown-menu li button:hover {
   background-color: #f0f0f0;
+}
+
+#gyroscopeGraph {
+  height: 500px !important;
+  /* Låser höjden till en fast 500px */
+  max-height: 500px !important;
+  /* Sätter en övre gräns för höjden */
+  width: 100% !important;
+  /* Sätter bredden till 100% av container */
+  overflow: hidden;
+  /* Förhindrar att extra innehåll visas utanför */
+}
+
+#accelerometerGraph {
+  height: 500px !important;
+  /* Låser höjden till en fast 500px */
+  max-height: 500px !important;
+  /* Sätter en övre gräns för höjden */
+  width: 100% !important;
+  /* Sätter bredden till 100% av container */
+  overflow: hidden;
+  /* Förhindrar att extra innehåll visas utanför */
 }

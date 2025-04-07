@@ -39,10 +39,10 @@ saveButton.addEventListener('click', () => {
     <td class="status pending">PENDING...</td>
     <td>PENDING...</td>
     <td class="operations">
-      <button class="icon-btn">📹</button>
-      <button class="icon-btn">📊</button>
-      <button class="icon-btn">❓</button>
-      <button class="icon-btn delete-btn">🗑️</button>
+      <button class="icon-btn" title="View Camera">📹</button>
+      <button class="icon-btn" title="Fetching Data...">📊</button>
+      <button class="icon-btn" title="Fetching Data...">❓</button>
+      <button class="icon-btn delete-btn" title="Delete Device">🗑️</button>
     </td>
   `;
 
@@ -377,3 +377,124 @@ function colorCodeStatus(elementId, status) {
       statusElement.classList.remove('online', 'offline', 'pending');
   }
 }
+
+function fetchLogFiles() {
+  fetch("https://yourcompany.sharepoint.com/sites/yoursite/_api/web/GetFolderByServerRelativeUrl('SensorLogs')/Files", {
+    method: "GET",
+    headers: {
+      "Accept": "application/json;odata=verbose",
+      "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+    }
+  })
+    .then(response => response.json())
+    .then(data => {
+      const logDropdown = document.getElementById("logDropdown");
+      logDropdown.innerHTML = ""; // Clear existing entries
+
+      data.d.results.forEach(file => {
+        let option = document.createElement("option");
+        option.value = file.ServerRelativeUrl;
+        option.textContent = file.Name.replace("log_", "").replace(".json", "");
+        logDropdown.appendChild(option);
+      });
+    })
+    .catch(error => console.error("Error fetching logs:", error));
+}
+
+function loadLogData(fileUrl) {
+  if (!fileUrl) return;
+
+  fetch(`https://yourcompany.sharepoint.com${fileUrl}`, {
+    method: "GET",
+    headers: {
+      "Accept": "application/json",
+      "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+    }
+  })
+    .then(response => response.json())
+    .then(logData => {
+      updateGraphs(logData.data); // Pass the sensor data to the graph update function
+    })
+    .catch(error => console.error("Error fetching log data:", error));
+}
+
+function updateGraphs(sensorData) {
+  // Assume you have chart instances for each graph
+  accelerometerChart.data.datasets[0].data = [sensorData.accelerometer.x];
+  accelerometerChart.data.datasets[1].data = [sensorData.accelerometer.y];
+  accelerometerChart.data.datasets[2].data = [sensorData.accelerometer.z];
+
+  gyroscopeChart.data.datasets[0].data = [sensorData.gyroscope.x];
+  gyroscopeChart.data.datasets[1].data = [sensorData.gyroscope.y];
+  gyroscopeChart.data.datasets[2].data = [sensorData.gyroscope.z];
+
+  // Update the charts to reflect the new data
+  accelerometerChart.update();
+  gyroscopeChart.update();
+}
+
+const ctx = document.getElementById('myChart').getContext('2d');
+new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: timestamps,  // Tidsstämpel för dina data
+    datasets: [
+      { label: 'Sensor X', data: xData, borderColor: 'red', fill: false },
+      { label: 'Sensor Y', data: yData, borderColor: 'green', fill: false },
+      { label: 'Sensor Z', data: zData, borderColor: 'blue', fill: false }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: {
+      mode: 'index',
+      intersect: false,
+      zoom: {
+        enabled: false,  // Inaktiverar zoom
+      }
+    },
+    plugins: {
+      tooltip: {
+        enabled: false  // Inaktivera tooltips för att göra det enklare
+      },
+      legend: {
+        display: true
+      }
+    },
+    scales: {
+      x: {
+        title: {
+          display: true,
+          text: 'Time'
+        },
+        min: 0, // Sätt minimum för X-axeln
+        max: Math.max(...timestamps) + 1, // Sätt maxvärdet för X-axeln
+        type: 'linear', // Ange X-axeln som linjär om det är tidsdata
+      },
+      y: {
+        title: {
+          display: true,
+          text: 'Sensor Value'
+        },
+        min: Math.min(...xData, ...yData, ...zData) - 1,  // Sätt ett minimum för Y-axeln
+        max: Math.max(...xData, ...yData, ...zData) + 1,   // Sätt ett maximum för Y-axeln
+        ticks: {
+          beginAtZero: true,  // Gör att Y-axeln börjar på noll
+        },
+        stepSize: 0.0001,  // Justera stegen mellan tärningarna (kan vara användbart om du har ett begränsat intervall)
+      }
+    }
+  }
+});
+
+const canvas = document.getElementById("gyroscopeGraph");
+
+// Sätt en fast höjd och maxhöjd
+canvas.style.height = '500px';  // Låser höjden till 500px
+canvas.style.maxHeight = '500px';  // Låser maxhöjden till 500px
+
+// Alternativt sätt canvasens height och width direkt
+canvas.height = 500;
+canvas.width = 1077;
+

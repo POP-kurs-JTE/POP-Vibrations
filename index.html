@@ -80,10 +80,9 @@
 
 
 
-
       </header>
       <div class="search-bar">
-        <input type="text" placeholder="Search">
+
       </div>
       <table class="device-table">
         <thead>
@@ -100,10 +99,10 @@
             <td class="status online">ONLINE</td>
             <td>2024-12-23 12:15 (Gmt+3)</td>
             <td class="operations">
-              <button class="icon-btn">📹</button>
+              <button class="icon-btn" title="View Camera">📹</button>
               <button class="icon-btn" title="View Graph" onclick="toggleGraphWindow()">📊</button>
-              <button class="icon-btn ok-btn">✔️</button>
-              <button class="icon-btn delete-btn">🗑️</button>
+              <button class="icon-btn ok-btn" title="No Alarms">✔️</button>
+              <button class="icon-btn delete-btn" title="Delete Device">🗑️</button>
             </td>
           </tr>
           <tr>
@@ -114,7 +113,7 @@
       </table>
       <button class="add-device-btn" id="addDeviceButton">ADD NEW DEVICE</button>
 
-      <!-- Hidden form for adding a new device -->
+
       <!-- Hidden form for adding a new device -->
       <div class="new-device-form" id="newDeviceForm">
         <table>
@@ -142,270 +141,335 @@
         </div>
       </div>
 
-
+      </main>
       <script src="script.js"></script>
   </body>
 
-  <!DOCTYPE html>
-  <html lang="en">
+</html>
 
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Device Management</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <!-- Include jsPDF & html2canvas -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <style>
-      /* Add styles for the graph window */
-      .graph-window {
-        display: none;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 80%;
-        height: 80%;
-        background: white;
-        border: 2px solid #333;
-        padding: 20px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        z-index: 1000;
-        overflow: auto;
-      }
+<!DOCTYPE html>
+<html lang="en">
 
-      .graph-overlay {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 999;
-      }
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Device Management</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <!-- Include jsPDF & html2canvas -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    /* Add styles for the graph window */
+    .graph-window {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80%;
+      height: 80%;
+      background: white;
+      border: 2px solid #333;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      overflow: auto;
+    }
 
-      .icon-btn {
-        cursor: pointer;
-        font-size: 24px;
-        background: none;
-        border: none;
-      }
+    .graph-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
 
-      /* Additional styles for titles and descriptions */
-      .graph-title {
-        font-size: 1.5em;
-        font-weight: bold;
-        margin-top: 20px;
-      }
+    .icon-btn {
+      cursor: pointer;
+      font-size: 24px;
+      background: none;
+      border: none;
+    }
 
-      .graph-description {
-        font-size: 1.1em;
-        margin-bottom: 20px;
-        color: #555;
-      }
+    /* Additional styles for titles and descriptions */
+    .graph-title {
+      font-size: 1.5em;
+      font-weight: bold;
+      margin-top: 20px;
+    }
 
-      .graph-container {
-        margin-bottom: 40px;
-      }
-    </style>
-  </head>
+    .graph-description {
+      font-size: 1.1em;
+      margin-bottom: 20px;
+      color: #555;
+    }
 
-  <body>
+    .graph-container {
+      margin-bottom: 40px;
+    }
+  </style>
+</head>
 
-</div>
-</div>
-</header>
+<body>
 
-<!-- Graph Window (for displaying multiple graphs) -->
-<div id="graph-window" class="graph-window">
-  <h2>Sensor Data Visualization</h2>
+  </div>
+  </div>
+  </header>
 
-  <!-- Accelerometer Graph Section -->
-  <div class="graph-container">
-    <div class="graph-title">Accelerometer Data</div>
-    <div class="graph-description">
-      The accelerometer measures the acceleration force in three dimensions (X, Y, Z) of the device.
+  <!-- Graph Window (for displaying multiple graphs) -->
+  <div id="graph-window" class="graph-window">
+    <h2>Sensor Data Visualization</h2>
+
+    <!-- Accelerometer Graph Section -->
+    <div class="graph-container">
+      <div class="graph-title">Accelerometer Data</div>
+      <div class="graph-description">
+        The accelerometer measures the acceleration force in three dimensions (X, Y, Z) of the device.
+      </div>
+      <canvas id="accelerometerGraph"></canvas>
     </div>
-    <canvas id="accelerometerGraph"></canvas>
-  </div>
 
-  <!-- Gyroscope Graph Section -->
-  <div class="graph-container">
-    <div class="graph-title">Gyroscope Data</div>
-    <div class="graph-description">
-      The gyroscope measures the angular velocity (rate of rotation) around the three axes of the device.
+    <!-- Gyroscope Graph Section -->
+    <div class="graph-container">
+      <div class="graph-title">Gyroscope Data</div>
+      <div class="graph-description">
+        The gyroscope measures the angular velocity (rate of rotation) around the three axes of the device.
+      </div>
+      <canvas id="gyroscopeGraph">height="12972" style="display: block; box-sizing: border-box; height: 12972px; width:
+        1077px;" </canvas>
     </div>
-    <canvas id="gyroscopeGraph"></canvas>
-  </div>
 
-  <!-- Rotation Vector Graph Section -->
-  <div class="graph-container">
-    <div class="graph-title">Rotation Vector</div>
-    <div class="graph-description">
-      The rotation vector provides the orientation of the device in 3D space, calculated using the device's sensors.
+    <!-- Rotation Vector Graph Section -->
+    <div class="graph-container">
+      <div class="graph-title">Rotation Vector</div>
+      <div class="graph-description">
+        The rotation vector provides the orientation of the device in 3D space, calculated using the device's sensors.
+      </div>
+      <canvas id="rotationVectorGraph"></canvas>
     </div>
-    <canvas id="rotationVectorGraph"></canvas>
-  </div>
 
-  <!-- Linear Acceleration Graph Section -->
-  <div class="graph-container">
-    <div class="graph-title">Linear Acceleration</div>
-    <div class="graph-description">
-      The linear acceleration graph represents the device's acceleration in straight-line motion, excluding
-      gravitational effects.
+    <!-- Linear Acceleration Graph Section -->
+    <div class="graph-container">
+      <div class="graph-title">Linear Acceleration</div>
+      <div class="graph-description">
+        The linear acceleration graph represents the device's acceleration in straight-line motion, excluding
+        gravitational effects.
+      </div>
+      <canvas id="linearAccelerationGraph"></canvas>
+
     </div>
-    <canvas id="linearAccelerationGraph"></canvas>
+    <button id="downloadPdfBtn">Download PDF Report</button>
+
+
+    <!-- Download PDF Button -->
+    <select id="logDropdown" onchange="loadLogData(this.value)">
+      <option value="">Select a log entry</option>
+    </select>
   </div>
 
-  <!-- Download PDF Button -->
-  <button id="downloadPdfBtn">Download PDF Report</button>
-</div>
 
-<!-- Content to be exported -->
-<div id="content">
-  <div class="chart"> <!-- Each section as a separate div -->
-    <canvas id="chart1"></canvas>
+  <!-- Content to be exported -->
+  <div id="content">
+    <div class="chart"> <!-- Each section as a separate div -->
+      <canvas id="chart1"></canvas>
+    </div>
+    <div class="chart">
+      <canvas id="chart2"></canvas>
+    </div>
+    <div class="chart">
+      <canvas id="chart3"></canvas>
+    </div>
   </div>
-  <div class="chart">
-    <canvas id="chart2"></canvas>
   </div>
-  <div class="chart">
-    <canvas id="chart3"></canvas>
-  </div>
-</div>
-</div>
 
-<div id="graph-overlay" class="graph-overlay" onclick="closeGraphWindow()"></div>
+  <div id="graph-overlay" class="graph-overlay" onclick="closeGraphWindow()"></div>
 
-<script>
-  // Placeholder for the JSON data you will receive (replace this with real data)
-  const sensorData = {
-    accelerometer: [{ x: 1, y: 2, z: 3 }, { x: 4, y: 5, z: 6 }],
-    gyroscope: [{ x: 0.1, y: 0.2, z: 0.3 }, { x: 0.4, y: 0.5, z: 0.6 }],
-    rotationVector: [{ x: 0, y: 1, z: 0 }, { x: 1, y: 0, z: 0 }],
-    linearAcceleration: [{ x: 2, y: 3, z: 4 }, { x: 5, y: 6, z: 7 }]
-  };
+  <script>
 
-  // Function to plot graphs using Chart.js
-  function plotGraph(ctx, data, title) {
-    new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: data.map((_, index) => index + 1),
-        datasets: [
-          {
-            label: `${title} X-axis`,
-            data: data.map(item => item.x),
-            borderColor: 'red',
-            fill: false
-          },
-          {
-            label: `${title} Y-axis`,
-            data: data.map(item => item.y),
-            borderColor: 'green',
-            fill: false
-          },
-          {
-            label: `${title} Z-axis`,
-            data: data.map(item => item.z),
-            borderColor: 'blue',
-            fill: false
+    let sensorData = [];
+
+    function fetchSensorData() {
+      return fetch("data_log.jsonl")
+        .then(response => response.text())
+        .then(text => {
+          // Rensa gammal data
+          sensorData = [];
+
+          // Läs in ny data
+          sensorData = text.trim().split("\n").map(line => JSON.parse(line));
+
+          drawGraphs(sensorData);
+        })
+        .catch(error => {
+          console.error("Fel vid hämtning av data:", error);
+        });
+    }
+
+    window.onload = () => {
+      fetchSensorData();
+    };
+
+    // Laddar in sensordata från data_log.jsonl och ritar grafer
+    async function fetchSensorData() {
+      try {
+        const response = await fetch('data_log.jsonl'); // Hämta filen
+        const text = await response.text(); // Läs in som text
+
+        // Dela upp texten i rader och konvertera varje rad till JSON
+        const dataLines = text.trim().split("\n").map(line => JSON.parse(line));
+
+        // Strukturerar data i objekt baserat på sensorType
+        const sensorData = {
+          accelerometer: [],
+          gyroscope: [],
+          rotationVector: [],
+          linearAcceleration: [],
+          magnetometer: []
+        };
+
+        // Loopar igenom varje rad och lägger in datan i rätt kategori
+        dataLines.forEach(entry => {
+          const { sensorType, values, timestamp } = entry;
+          const formattedData = { timestamp, x: values[0], y: values[1], z: values[2] };
+
+          if (sensorType.includes("Accelerometer")) {
+            sensorData.accelerometer.push(formattedData);
+          } else if (sensorType.includes("Gyroscope")) {
+            sensorData.gyroscope.push(formattedData);
+          } else if (sensorType.includes("Rotation Vector")) {
+            sensorData.rotationVector.push(formattedData);
+          } else if (sensorType.includes("Linear Acceleration")) {
+            sensorData.linearAcceleration.push(formattedData);
+          } else if (sensorType.includes("Magnetometer")) {
+            sensorData.magnetometer.push(formattedData);
           }
-        ]
-      },
-      options: {
-        responsive: true,
-        scales: {
-          x: { type: 'linear', position: 'bottom' }
-        }
+        });
+
+        console.log("Laddad sensordata:", sensorData); // Debug-logg
+
+        // Rita upp graferna
+        drawGraph('accelerometerGraph', 'Accelerometer Data', sensorData.accelerometer);
+        drawGraph('gyroscopeGraph', 'Gyroscope Data', sensorData.gyroscope);
+        drawGraph('rotationVectorGraph', 'Rotation Vector Data', sensorData.rotationVector);
+        drawGraph('linearAccelerationGraph', 'Linear Acceleration Data', sensorData.linearAcceleration);
+        drawGraph('magnetometerGraph', 'Magnetometer Data', sensorData.magnetometer);
+
+      } catch (error) {
+        console.error("Fel vid hämtning av data:", error);
       }
-    });
-  }
+    }
 
-  // Plot graphs for accelerometer, gyroscope, rotation vector, and linear acceleration
-  window.onload = function () {
-    const accelerometerCanvas = document.getElementById('accelerometerGraph').getContext('2d');
-    const gyroscopeCanvas = document.getElementById('gyroscopeGraph').getContext('2d');
-    const rotationVectorCanvas = document.getElementById('rotationVectorGraph').getContext('2d');
-    const linearAccelerationCanvas = document.getElementById('linearAccelerationGraph').getContext('2d');
+    function drawGraph(canvasId, label, data) {
+      const ctx = document.getElementById(canvasId).getContext('2d');
 
-    plotGraph(accelerometerCanvas, sensorData.accelerometer, 'Accelerometer');
-    plotGraph(gyroscopeCanvas, sensorData.gyroscope, 'Gyroscope');
-    plotGraph(rotationVectorCanvas, sensorData.rotationVector, 'Rotation Vector');
-    plotGraph(linearAccelerationCanvas, sensorData.linearAcceleration, 'Linear Acceleration');
-  };
+      // Rensa canvas innan du ritar den nya grafen
+      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
-  // Function to toggle the visibility of the graph window
-  function toggleGraphWindow() {
-    const graphWindow = document.getElementById("graph-window");
-    const graphOverlay = document.getElementById("graph-overlay");
-    const currentDisplay = graphWindow.style.display;
-    if (currentDisplay === "none" || currentDisplay === "") {
-      // Show the graph window and overlay
-      graphWindow.style.display = "block";
-      graphOverlay.style.display = "block";
-    } else {
-      // Hide the graph window and overlay
+      // Skapa datasets för X, Y och Z
+      const timestamps = data.map(d => new Date(d.timestamp).toLocaleTimeString());
+      const xData = data.map(d => d.x);
+      const yData = data.map(d => d.y);
+      const zData = data.map(d => d.z);
+
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: timestamps,
+          datasets: [
+            { label: `${label} - X`, data: xData, borderColor: 'red', fill: false },
+            { label: `${label} - Y`, data: yData, borderColor: 'green', fill: false },
+            { label: `${label} - Z`, data: zData, borderColor: 'blue', fill: false }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { title: { display: true, text: "Time" } },
+            y: { title: { display: true, text: "Sensor Value" } }
+          }
+        }
+      });
+    }
+
+
+
+
+
+
+
+    // Function to toggle the visibility of the graph window
+    function toggleGraphWindow() {
+      const graphWindow = document.getElementById("graph-window");
+      const graphOverlay = document.getElementById("graph-overlay");
+      const currentDisplay = graphWindow.style.display;
+      if (currentDisplay === "none" || currentDisplay === "") {
+        // Show the graph window and overlay
+        graphWindow.style.display = "block";
+        graphOverlay.style.display = "block";
+      } else {
+        // Hide the graph window and overlay
+        graphWindow.style.display = "none";
+        graphOverlay.style.display = "none";
+      }
+    }
+
+    // Function to close the graph window
+    function closeGraphWindow() {
+      const graphWindow = document.getElementById("graph-window");
+      const graphOverlay = document.getElementById("graph-overlay");
       graphWindow.style.display = "none";
       graphOverlay.style.display = "none";
     }
-  }
 
-  // Function to close the graph window
-  function closeGraphWindow() {
-    const graphWindow = document.getElementById("graph-window");
-    const graphOverlay = document.getElementById("graph-overlay");
-    graphWindow.style.display = "none";
-    graphOverlay.style.display = "none";
-  }
+    // Function to download the PDF report
+    document.getElementById('downloadPdfBtn').addEventListener('click', async function () {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF('p', 'mm', 'a4'); // A4 Portrait mode
+      let yOffset = 20; // Initial vertical position
 
-  // Function to download the PDF report
-  document.getElementById('downloadPdfBtn').addEventListener('click', async function () {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF('p', 'mm', 'a4'); // A4 Portrait mode
-    let yOffset = 20; // Initial vertical position
+      // Add Title
+      doc.setFontSize(18);
+      doc.text("Sensor Data Report", 15, yOffset);
+      yOffset += 10; // Move down
 
-    // Add Title
-    doc.setFontSize(18);
-    doc.text("Sensor Data Report", 15, yOffset);
-    yOffset += 10; // Move down
+      // List of graph IDs
+      const graphIds = ['accelerometerGraph', 'gyroscopeGraph', 'rotationVectorGraph', 'linearAccelerationGraph'];
 
-    // List of graph IDs
-    const graphIds = ['accelerometerGraph', 'gyroscopeGraph', 'rotationVectorGraph', 'linearAccelerationGraph'];
+      for (let i = 0; i < graphIds.length; i++) {
+        let canvasElement = document.getElementById(graphIds[i]);
 
-    for (let i = 0; i < graphIds.length; i++) {
-      let canvasElement = document.getElementById(graphIds[i]);
-
-      if (!canvasElement) {
-        console.error(`Element with ID ${graphIds[i]} not found.`);
-        continue; // Skip missing elements
-      }
-
-      try {
-        const canvasImage = await html2canvas(canvasElement, { scale: 2 });
-        const imgData = canvasImage.toDataURL('image/png');
-
-        let imgWidth = 180; // Maintain margins
-        let imgHeight = (canvasImage.height * imgWidth) / canvasImage.width; // Keep aspect ratio
-
-        if (yOffset + imgHeight > 280) { // If image overflows, add new page
-          doc.addPage();
-          yOffset = 20; // Reset for new page
+        if (!canvasElement) {
+          console.error(`Element with ID ${graphIds[i]} not found.`);
+          continue; // Skip missing elements
         }
 
-        doc.addImage(imgData, 'PNG', 15, yOffset, imgWidth, imgHeight);
-        yOffset += imgHeight + 10; // Move down for next image
-      } catch (error) {
-        console.error(`Error rendering graph ${graphIds[i]}:`, error);
-      }
-    }
+        try {
+          const canvasImage = await html2canvas(canvasElement, { scale: 2 });
+          const imgData = canvasImage.toDataURL('image/png');
 
-    // Save the PDF
-    doc.save('SensorDataReport.pdf');
-  });
-</script>
+          let imgWidth = 180; // Maintain margins
+          let imgHeight = (canvasImage.height * imgWidth) / canvasImage.width; // Keep aspect ratio
+
+          if (yOffset + imgHeight > 280) { // If image overflows, add new page
+            doc.addPage();
+            yOffset = 20; // Reset for new page
+          }
+
+          doc.addImage(imgData, 'PNG', 15, yOffset, imgWidth, imgHeight);
+          yOffset += imgHeight + 10; // Move down for next image
+        } catch (error) {
+          console.error(`Error rendering graph ${graphIds[i]}:`, error);
+        }
+      }
+
+      // Save the PDF
+      doc.save('SensorDataReport.pdf');
+    });
+  </script>
 </body>
