@@ -121,16 +121,13 @@
             <tr>
               <th>New Device Name</th>
               <th>New Device Phone Number</th>
-              <th>Camera Connection</th>
-              <th>User Phone number</th>
+
             </tr>
           </thead>
           <tbody>
             <tr>
               <td><input type="text" placeholder="[ENTER NAME]*" required></td>
-              <td><input type="text" placeholder="[NEW DEVICE PHONE NUMBER]*" required></td>
-              <td><button>CONNECT CAMERA</button></td>
-              <td><input type="text" placeholder="[USER PHONE NUMBER]*" required></td>
+              <td><input type="text" placeholder="[EXAMPLE: 0443984501]*" required></td>
             </tr>
           </tbody>
         </table>
@@ -144,6 +141,8 @@
       </main>
       <script src="script.js"></script>
   </body>
+
+
 
 </html>
 
@@ -489,3 +488,49 @@
     });
   </script>
 </body>
+
+<!DOCTYPE html>
+<html lang="sv">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Sensorportal</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    select,
+    button {
+      margin: 10px 0;
+    }
+
+    #logDisplay {
+      white-space: pre-wrap;
+      background: #f1f1f1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Sensorportal</h1>
+
+  <label for="deviceSelect">Välj enhet:</label>
+  <select id="deviceSelect">
+    <option>Hämtar enheter...</option>
+  </select>
+
+  <button id="loadLogBtn">Visa logg</button>
+
+  <h2>Logg:</h2>
+  <div id="logDisplay">Ingen logg ännu.</div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>

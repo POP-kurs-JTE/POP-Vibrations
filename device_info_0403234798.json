@@ -1,0 +1,140 @@
+{
+  "phoneId": "0403234798",
+  "sensors": [
+    {
+      "id": 32,
+      "name": "Dynamic Sensor Manager"
+    },
+    {
+      "id": 1,
+      "name": "LSM6DSV Accelerometer"
+    },
+    {
+      "id": 2,
+      "name": "MMC56X3X Magnetometer"
+    },
+    {
+      "id": 3,
+      "name": "Orientation Sensor"
+    },
+    {
+      "id": 4,
+      "name": "LSM6DSV Gyroscope"
+    },
+    {
+      "id": 5,
+      "name": "TMD3719 Ambient Light"
+    },
+    {
+      "id": 6,
+      "name": "ICP20100 Pressure Sensor"
+    },
+    {
+      "id": 8,
+      "name": "TMD3719 Proximity (wake-up)"
+    },
+    {
+      "id": 9,
+      "name": "Gravity Sensor"
+    },
+    {
+      "id": 10,
+      "name": "Linear Acceleration Sensor"
+    },
+    {
+      "id": 11,
+      "name": "Rotation Vector Sensor"
+    },
+    {
+      "id": 14,
+      "name": "MMC56X3X Magnetometer-Uncalibrated"
+    },
+    {
+      "id": 15,
+      "name": "Game Rotation Vector Sensor"
+    },
+    {
+      "id": 16,
+      "name": "LSM6DSV Gyroscope-Uncalibrated"
+    },
+    {
+      "id": 17,
+      "name": "Significant Motion (wake-up)"
+    },
+    {
+      "id": 18,
+      "name": "Step Detector"
+    },
+    {
+      "id": 19,
+      "name": "Step Counter"
+    },
+    {
+      "id": 20,
+      "name": "Geomagnetic Rotation Vector Sensor"
+    },
+    {
+      "id": 22,
+      "name": "Tilt Sensor (wake-up)"
+    },
+    {
+      "id": 25,
+      "name": "Device Pickup Sensor (wake-up)"
+    },
+    {
+      "id": 27,
+      "name": "Device Orientation"
+    },
+    {
+      "id": 35,
+      "name": "LSM6DSV Accelerometer-Uncalibrated"
+    },
+    {
+      "id": 65538,
+      "name": "LSM6DSV Temperature"
+    },
+    {
+      "id": 65539,
+      "name": "ICP20100 Temperature"
+    },
+    {
+      "id": 65541,
+      "name": "Camera V-Sync 2"
+    },
+    {
+      "id": 131073,
+      "name": "Double Twist (wake-up)"
+    },
+    {
+      "id": 131077,
+      "name": "Binned Brightness (wake-up)"
+    },
+    {
+      "id": 131083,
+      "name": "Proximity Gated Single Tap Gesture (wake-up)"
+    },
+    {
+      "id": 131085,
+      "name": "Proximity Gated Long Press Gesture (wake-up)"
+    },
+    {
+      "id": 131087,
+      "name": "Quick Pickup Sensor (wake-up)"
+    },
+    {
+      "id": 131088,
+      "name": "Auto Brightness"
+    },
+    {
+      "id": 131092,
+      "name": "Proximity(Voice Calls) Sensor (wake-up)"
+    }
+  ],
+  "settings": {
+    "samplingRateMs": 200,
+    "uploadRateMs": 5000,
+    "uploadBatch": 5000,
+    "decimalPlaces": 2,
+    "batteryThreshold": 20
+  }
+}

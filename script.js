@@ -21,11 +21,10 @@ const deviceTableBody = document.querySelector('.device-table tbody');
 saveButton.addEventListener('click', () => {
   // Get form input values
   const deviceName = document.querySelector('.new-device-form input[placeholder="[ENTER NAME]*"]').value;
-  const phoneNumber = document.querySelector('.new-device-form input[placeholder="[NEW DEVICE PHONE NUMBER]*"]').value;
-  const userPhoneNumber = document.querySelector('.new-device-form input[placeholder="[USER PHONE NUMBER]*"]').value;
+  const phoneNumber = document.querySelector('.new-device-form input[placeholder="[EXAMPLE: 0443984501]*"]').value;
 
   // Check if required fields are filled
-  if (!deviceName || !phoneNumber || !userPhoneNumber) {
+  if (!deviceName || !phoneNumber) {
     alert('Please fill in all required fields!');
     return;
   }
@@ -33,28 +32,32 @@ saveButton.addEventListener('click', () => {
   // Create a new row for the device table
   const newRow = document.createElement('tr');
 
+
+
   // Add the new device details to the row
   newRow.innerHTML = `
     <td>${deviceName}</td>
-    <td class="status pending">PENDING...</td>
-    <td>PENDING...</td>
-    <td class="operations">
-      <button class="icon-btn" title="View Camera">📹</button>
-      <button class="icon-btn" title="Fetching Data...">📊</button>
-      <button class="icon-btn" title="Fetching Data...">❓</button>
-      <button class="icon-btn delete-btn" title="Delete Device">🗑️</button>
-    </td>
-  `;
+  <td class="status pending">OFFLINE</td>
+  <td>N/A</td>
+  <td class="operations">
+    <button class="icon-btn" title="View Camera">📹</button>
+    <button class="icon-btn sensor-dropdown-btn" title="Folder not connected">📊</button>
+    <button class="icon-btn" title="N/A">❓</button>
+    <button class="icon-btn delete-btn" title="Delete Device">🗑️</button>
+  </td>
+`;
+
+
 
   // Append the new row to the table
   deviceTableBody.appendChild(newRow);
 
   // Reset the form and hide it
   document.querySelector('.new-device-form input[placeholder="[ENTER NAME]*"]').value = '';
-  document.querySelector('.new-device-form input[placeholder="[NEW DEVICE PHONE NUMBER]*"]').value = '';
-  document.querySelector('.new-device-form input[placeholder="[USER PHONE NUMBER]*"]').value = '';
+  document.querySelector('.new-device-form input[placeholder="[EXAMPLE: 0443984501]*"]').value = '';
   newDeviceForm.style.display = 'none';
 });
+
 
 // Event listener for the delete buttons
 document.addEventListener('click', (event) => {
@@ -497,4 +500,6 @@ canvas.style.maxHeight = '500px';  // Låser maxhöjden till 500px
 // Alternativt sätt canvasens height och width direkt
 canvas.height = 500;
 canvas.width = 1077;
+
+window.addEventListener('DOMContentLoaded', loadFromSharePoint);
 
